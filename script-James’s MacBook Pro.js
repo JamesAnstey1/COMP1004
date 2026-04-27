@@ -32,9 +32,7 @@ function showUnlockMode() {
   if (overlay) overlay.style.display = "block";
 }
 
-/* -------------------------
-   Crypto helpers
-   ------------------------- */
+/*Crypto helpers*/
 async function encrypt(text, password) {
   const enc = new TextEncoder();
   const pwKey = await crypto.subtle.importKey(
@@ -93,9 +91,7 @@ async function decrypt(json, password) {
   return new TextDecoder().decode(decrypted);
 }
 
-/* -------------------------
-   Render / search helpers
-   ------------------------- */
+/*Render / search helpers*/
 function renderPasswords(list = passwords) {
   const ul = document.getElementById("myUL");
   if (!ul) return;
@@ -158,9 +154,7 @@ function parseTags(input) {
   return input.split(',').map(t => t.trim()).filter(Boolean);
 }
 
-/* -------------------------
-   DOM ready wiring
-   ------------------------- */
+/*DOM ready wiring*/
 document.addEventListener('DOMContentLoaded', () => {
   // Elements used by auth flow
   const authBtn = document.getElementById("authBtn");
@@ -249,9 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  /* -------------------------
-     Modal open/close handlers
-     ------------------------- */
+  /*Modal open/close handlers*/
   function openModal() {
     if (!addModal) return;
     addModal.classList.remove('hidden');
@@ -275,9 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape' && addModal && !addModal.classList.contains('hidden')) closeModalFn();
   });
 
-  /* -------------------------
-     Add form submit handler
-     ------------------------- */
+  /*Add form submit handler*/
   if (addForm) {
     addForm.addEventListener('submit', async (e) => {
       e.preventDefault();
