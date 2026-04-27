@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>JA-Vault</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style-James’s MacBook Pro.css" />
+  <script src="script-James’s MacBook Pro.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="title">Password Manager</div>
+  </header>
+
+  <!-- Floating Add Button (single source of truth) -->
+  <button id="addBtn" class="plus-btn" aria-label="Add account">+</button>
+
+  <!-- Add Account Modal (starts hidden) -->
+  <div id="addModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h3 class="modal-title">Add Account</h3>
+        <button id="closeModal" class="close-btn" aria-label="Close">×</button>
+      </header>
+
+      <form id="addForm" class="modal-form" autocomplete="off">
+        <label>
+          <span class="label">Name</span>
+          <input id="fieldName" type="text" required />
+        </label>
+
+        <label>
+          <span class="label">Username or Email</span>
+          <input id="fieldUser" type="text" required />
+        </label>
+
+        <label>
+          <span class="label">Password</span>
+          <input id="fieldPass" type="password" required />
+        </label>
+
+        <label>
+          <span class="label">Tags</span>
+          <input id="fieldTags" type="text" placeholder="comma separated" />
+        </label>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelAdd" class="btn secondary">Cancel</button>
+          <button type="submit" id="saveAdd" class="btn primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-container">
+    <input type="text" placeholder="Search.." id="myInput" />
+  </div>
+
+  <!-- Auth overlay (shown until vault created/unlocked) -->
+  <div id="authOverlay" class="overlay">
+    <div class="authBox">
+      <h2 id="authTitle">Unlock Vault</h2>
+
+      <input id="masterPwd" type="password" placeholder="Master password" autocomplete="new-password" />
+      <div class="confirmPasswordBox">
+        <input id="masterPwdConfirm" type="password" placeholder="Confirm password" style="display:none" autocomplete="new-password" />
+      </div>
+
+      <button id="authBtn">Unlock</button>
+      <div id="authMsg" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- Password list -->
+  <ul class="name-list" id="myUL"></ul>
+</body>
+</html>
