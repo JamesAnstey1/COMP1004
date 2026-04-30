@@ -7,9 +7,7 @@ let masterPassword = null;
 // In-memory passwords array
 let passwords = [];
 
-/* -------------------------
-   UI mode helpers
-   ------------------------- */
+/* UI mode helpers*/
 function showCreateMode() {
   const authTitle = document.getElementById("authTitle");
   const authBtn = document.getElementById("authBtn");
@@ -20,6 +18,8 @@ function showCreateMode() {
   if (confirm) confirm.style.display = "block";
   if (overlay) overlay.style.display = "block";
 }
+
+// Shows the unlock screen and hides the confirm-password field
 
 function showUnlockMode() {
   const authTitle = document.getElementById("authTitle");
@@ -32,7 +32,8 @@ function showUnlockMode() {
   if (overlay) overlay.style.display = "block";
 }
 
-/*Crypto helpers*/
+/*Crypto helpers: encrypts text using a password */
+
 async function encrypt(text, password) {
   const enc = new TextEncoder();
   const pwKey = await crypto.subtle.importKey(
@@ -61,7 +62,7 @@ async function encrypt(text, password) {
     data: Array.from(new Uint8Array(encrypted))
   });
 }
-
+/* Crypto helpers: decrypts encrypted JSON using the password */
 async function decrypt(json, password) {
   const obj = JSON.parse(json);
   const enc = new TextEncoder();
@@ -91,7 +92,7 @@ async function decrypt(json, password) {
   return new TextDecoder().decode(decrypted);
 }
 
-/*Render / search helpers*/
+/* Renders the password list items into the page */
 function renderPasswords(list = passwords) {
   const ul = document.getElementById("myUL");
   if (!ul) return;
@@ -123,7 +124,7 @@ function renderPasswords(list = passwords) {
     ul.appendChild(li);
   });
 }
-
+/* Utility functions: handles safe HTML rendering, searching, and tag parsing*/
 function escapeHtml(s) {
   if (s == null) return "";
   return String(s)
@@ -154,7 +155,7 @@ function parseTags(input) {
   return input.split(',').map(t => t.trim()).filter(Boolean);
 }
 
-/*DOM ready wiring*/
+/* Main app setup: runs when page loads and wires up all UI elements*/
 document.addEventListener('DOMContentLoaded', () => {
   // Elements used by auth flow
   const authBtn = document.getElementById("authBtn");
@@ -178,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addModal.setAttribute('aria-hidden', 'true');
   }
 
-  // Startup: decide create vs unlock
+    /* Startup logic: decides whether to create a new vault or unlock existing one */
   function startup() {
     const stored = localStorage.getItem(vaultKey);
     if (!stored) {
@@ -190,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   startup();
 
-  // Auth button handler (create or unlock)
+  /* Authentication handler: handles both creating and unlocking the vault*/
   if (authBtn) {
     authBtn.onclick = async () => {
       const pwd = masterPwdInput ? masterPwdInput.value : "";
@@ -243,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  /*Modal open/close handlers*/
+  /* Modal control: opening, closing, and keyboard handling for add/edit modal*/
   function openModal() {
     if (!addModal) return;
     addModal.classList.remove('hidden');
@@ -267,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape' && addModal && !addModal.classList.contains('hidden')) closeModalFn();
   });
 
-  /*Add form submit handler*/
+    /* Add/edit form handler: creates or updates password entries and saves encrypted vault */
   if (addForm) {
     addForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -318,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Wire search input if present
+    /* Search + initial render setup */
   const searchInput = document.getElementById("myInput");
   if (searchInput) {
     searchInput.addEventListener('input', mySearchFunction);
@@ -326,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial render (empty until unlocked)
   renderPasswords(passwords);
-  // Toggle reveal on click/tap and keyboard (Enter/Space)
+  /* Password reveal toggle: allows clicking or pressing keys to show/hide passwords */
     const listEl = document.getElementById('myUL');
     if (listEl) {
         listEl.addEventListener('click', (e) => {
@@ -345,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-        // Delete account handler
+    // Delete and edit handlers: manages removing and editing existing entries
     const listEl2 = document.getElementById('myUL');
     if (listEl2) {
       listEl2.addEventListener('click', async (e) => {
@@ -393,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addForm.setAttribute('data-editing', nameToEdit);
        });
       }
-
+    /* Export/import system: allows downloading and uploading vault data as JSON*/
     const exportBtn = document.getElementById("exportBtn");
     if (exportBtn) {
       exportBtn.addEventListener("click", () => {
