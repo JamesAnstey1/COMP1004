@@ -394,5 +394,55 @@ document.addEventListener('DOMContentLoaded', () => {
        });
       }
 
+    const exportBtn = document.getElementById("exportBtn");
+    if (exportBtn) {
+      exportBtn.addEventListener("click", () => {
+        const dataStr = JSON.stringify(passwords, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "vault-export.json";
+        a.click();
+
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    const importBtn = document.getElementById("importBtn");
+    const importFile = document.getElementById("importFile");
+
+    if (importBtn && importFile) {
+      importBtn.addEventListener("click", () => importFile.click());
+
+      importFile.addEventListener("change", async () => {
+        const file = importFile.files[0];
+        if (!file) return;
+
+        const text = await file.text();
+        let imported;
+
+        try {
+          imported = JSON.parse(text);
+          if (!Array.isArray(imported)) throw new Error("Invalid format");
+        } catch {
+          alert("Invalid JSON file.");
+          return;
+        }
+
+        passwords = imported;
+
+        try {
+         const encrypted = await encrypt(JSON.stringify(passwords), masterPassword);
+          localStorage.setItem(vaultKey, encrypted);
+          renderPasswords(passwords);
+          alert("Import successful.");
+        } catch (err) {
+          alert("Failed to import data.");
+        }
+      });
+    }
+
 
 });

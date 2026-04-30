@@ -33,7 +33,9 @@
   pointer-events: auto;
 }
 
-
+.confirmPasswordBox {
+  padding-inline: calc(100% /2 - 73px);
+}
 
 .list-container {
     height: 500px;
@@ -91,6 +93,7 @@
     font-size: 12px;
     cursor: pointer;
 }
+
 .email {
     display: inline-block;
     background: #eee;
@@ -199,6 +202,26 @@
 .edit-btn:hover {
   background: #e69900;
 }
+
+.import-export {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+}
+
+#importBtn, #exportBtn {
+  padding: 8px 12px;
+  background: #ddd;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#importBtn:hover, #exportBtn:hover {
+  background: #ccc;
+}
+
+
 
 
 .hidden { display: none; }
